@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"image"
 	"image/color"
+	_ "image/jpeg"
 	"image/png"
 	"io"
 	"os"
@@ -45,18 +46,17 @@ func (this *AsciiImg) Do() string {
 		panic(err)
 	}
 
-	fmt.Println(this.img.Bounds(), this.img.ColorModel(), string(gray.Get("default", 0)))
-
-	w, h := 2, 2
+	w, h := 4, 8
 	rows := this.img.Bounds().Dy() / h
 	cols := this.img.Bounds().Dx() / w
 
+	fmt.Println(rows, cols)
 	for r := 0; r < rows; r++ {
 		for c := 0; c < cols; c++ {
-			x, y := c*w, c*h
+			x, y := c*w, r*h
 
-			avg := this.getBlockInfo(w, h)
-			ascii += string(gray.Gray("default", avg))
+			avg := this.getBlockInfo(x, y, w, h)
+			ascii += string(gray.Get("default", avg))
 		}
 		ascii += "\r\n"
 	}
@@ -64,14 +64,14 @@ func (this *AsciiImg) Do() string {
 	return ascii
 }
 
-func (this *AsciiImg) getBlockInfo(w, h int) uint8 {
-	var sumGray uint8
+func (this *AsciiImg) getBlockInfo(x, y, w, h int) uint32 {
+	var sumGray uint32
 	for i := 0; i < h; i++ {
 		for j := 0; j < w; j++ {
-			Red, Green, Blue, _ := this.img.At(i, j).RGBA()
-			Grey := Red*3/10 + Green*59/100 + Blue*11/100
-			sumGray += Grey
+			Red, Green, Blue, _ := this.img.At(i+x, j+y).RGBA()
+			Gray := Red*3/10 + Green*59/100 + Blue*11/100
+			sumGray += Gray
 		}
 	}
-	return sumGray / w * h
+	return sumGray / uint32(w*h)
 }

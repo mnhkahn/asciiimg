@@ -6,10 +6,19 @@ import (
 	"testing"
 
 	"github.com/mnhkahn/asciiimg"
+	"github.com/mnhkahn/asciiimg/gray"
 )
 
 func TestMain(t *testing.T) {
-	file, err := os.Open("./eimyymF.png")
+	fmt.Println(len(gray.GetGray("default")))
+	file_name := "IMG_20140120_12034635.JPG"
+	file, err := os.Open("./" + file_name)
 	ai, err := asciiimg.NewAsciiImg(file)
-	fmt.Println(ai, err, ai.Do())
+	if err == nil {
+		ascii_txt, _ := os.Create(fmt.Sprintf("%s_ascii.txt", file_name))
+		_, err := ascii_txt.Write([]byte(ai.Do()))
+		fmt.Println(err)
+		ascii_txt.Close()
+	}
+	fmt.Println("Test Complete.", err)
 }
