@@ -1,7 +1,6 @@
 package asciiimg
 
 import (
-	"fmt"
 	"image"
 	"image/color"
 	_ "image/jpeg"
@@ -24,9 +23,8 @@ func NewAsciiImg(r io.Reader) (*AsciiImg, error) {
 	return ai, err
 }
 
-func (this *AsciiImg) Do() string {
+func (this *AsciiImg) Do(w, h int) string {
 	ascii := ""
-	fmt.Println(this.img.Bounds(), this.img.ColorModel())
 
 	img_test := image.NewNRGBA(this.img.Bounds())
 	for y := 0; y < this.img.Bounds().Dy(); y++ {
@@ -37,11 +35,9 @@ func (this *AsciiImg) Do() string {
 		}
 	}
 
-	w, h := 4, 8
 	rows := int(math.Ceil(float64(this.img.Bounds().Dy()) / float64(h)))
 	cols := int(math.Ceil(float64(this.img.Bounds().Dx()) / float64(w)))
 
-	fmt.Println(rows, cols)
 	for r := 0; r < rows; r++ {
 		for c := 0; c < cols; c++ {
 			x, y := c*w, r*h
@@ -73,9 +69,6 @@ func (this *AsciiImg) getBlockInfo(x, y, w, h int) uint32 {
 			Red, Green, Blue, _ := this.img.At(x+j, y+i).RGBA()
 			Gray := Red*3/10 + Green*59/100 + Blue*11/100
 			sumGray += Gray
-			if x == 552 && y == 416 {
-				fmt.Println(x+j, y+i)
-			}
 		}
 	}
 	return sumGray / uint32(w*h)
