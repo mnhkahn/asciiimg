@@ -11,7 +11,7 @@ import (
 
 func TestMain(t *testing.T) {
 	fmt.Println(len(gray.GetGray("default")))
-	file_name := "IMG_20140120_12034635.JPG"
+	file_name := "eimyymF.png"
 	file, err := os.Open("./" + file_name)
 	ai, err := asciiimg.NewAsciiImg(file)
 	if err == nil {

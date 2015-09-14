@@ -5,9 +5,9 @@ import (
 	"image"
 	"image/color"
 	_ "image/jpeg"
-	"image/png"
+	_ "image/png"
 	"io"
-	"os"
+	"math"
 
 	"github.com/mnhkahn/asciiimg/gray"
 )
@@ -34,21 +34,12 @@ func (this *AsciiImg) Do() string {
 			Red, Green, Blue, Alpha := this.img.At(x, y).RGBA()
 			Grey := Red*3/10 + Green*59/100 + Blue*11/100
 			img_test.Set(x, y, color.NRGBA{uint8(Grey), uint8(Grey), uint8(Grey), uint8(Alpha)})
-			// fmt.Println(Red, Green, Blue, Alpha, Grey)
 		}
 	}
 
-	imgfile, _ := os.Create(fmt.Sprintf("%s_grey.png", this.name))
-	defer imgfile.Close()
-
-	err := png.Encode(imgfile, img_test)
-	if err != nil {
-		panic(err)
-	}
-
 	w, h := 4, 8
-	rows := this.img.Bounds().Dy() / h
-	cols := this.img.Bounds().Dx() / w
+	rows := int(math.Ceil(float64(this.img.Bounds().Dy()) / float64(h)))
+	cols := int(math.Ceil(float64(this.img.Bounds().Dx()) / float64(w)))
 
 	fmt.Println(rows, cols)
 	for r := 0; r < rows; r++ {
@@ -64,13 +55,27 @@ func (this *AsciiImg) Do() string {
 	return ascii
 }
 
+func (this *AsciiImg) getSize(x, y, w, h int) (int, int) {
+	if x+w > this.img.Bounds().Dx() {
+		w = this.img.Bounds().Dx() - x
+	}
+	if y+h > this.img.Bounds().Dy() {
+		h = this.img.Bounds().Dy() - y
+	}
+	return w, h
+}
+
 func (this *AsciiImg) getBlockInfo(x, y, w, h int) uint32 {
+	w, h = this.getSize(x, y, w, h)
 	var sumGray uint32
 	for i := 0; i < h; i++ {
 		for j := 0; j < w; j++ {
-			Red, Green, Blue, _ := this.img.At(i+x, j+y).RGBA()
+			Red, Green, Blue, _ := this.img.At(x+j, y+i).RGBA()
 			Gray := Red*3/10 + Green*59/100 + Blue*11/100
 			sumGray += Gray
+			if x == 552 && y == 416 {
+				fmt.Println(x+j, y+i)
+			}
 		}
 	}
 	return sumGray / uint32(w*h)
