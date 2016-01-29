@@ -3,6 +3,7 @@ package asciiimg
 import (
 	"image"
 	"image/color"
+	_ "image/gif"
 	_ "image/jpeg"
 	_ "image/png"
 	"io"
@@ -25,6 +26,10 @@ func NewAsciiImg(r io.Reader) (*AsciiImg, error) {
 
 func (this *AsciiImg) Do(w, h int) string {
 	ascii := ""
+
+	if this.img == nil {
+		return ascii
+	}
 
 	img_test := image.NewNRGBA(this.img.Bounds())
 	for y := 0; y < this.img.Bounds().Dy(); y++ {
