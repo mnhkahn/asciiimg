@@ -24,7 +24,7 @@ func NewAsciiImg(r io.Reader) (*AsciiImg, error) {
 	return ai, err
 }
 
-func (this *AsciiImg) DoByRow(cols int) string {
+func (this *AsciiImg) DoByCol(cols int) string {
 	ascii := ""
 
 	if this.img == nil {
