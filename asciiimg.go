@@ -23,37 +23,12 @@ func NewAsciiImg(r io.Reader) (*AsciiImg, error) {
 	return ai, err
 }
 
-// func (this *AsciiImg) DoBlackWhite(cols int) (image.Image, error) {
-// 	if this.img == nil {
-// 		return ascii
-// 	}
-// 	img_test := image.NewNRGBA(this.img.Bounds())
-// 	for y := 0; y < this.img.Bounds().Dy(); y++ {
-// 		for x := 0; x < this.img.Bounds().Dx(); x++ {
-// 			Red, Green, Blue, Alpha := this.img.At(x, y).RGBA()
-// 			Grey := Red*3/10 + Green*59/100 + Blue*11/100
-// 			img_test.Set(x, y, color.NRGBA{uint8(Grey), uint8(Grey), uint8(Grey), uint8(Alpha)})
-// 		}
-// 	}
-
-// 	png.Decode(r)
-// }
-
 func (this *AsciiImg) DoByCol(cols int) string {
 	ascii := ""
 
 	if this.img == nil {
 		return ascii
 	}
-
-	// img_test := image.NewNRGBA(this.img.Bounds())
-	// for y := 0; y < this.img.Bounds().Dy(); y++ {
-	// 	for x := 0; x < this.img.Bounds().Dx(); x++ {
-	// 		Red, Green, Blue, Alpha := this.img.At(x, y).RGBA()
-	// 		Grey := Red*3/10 + Green*59/100 + Blue*11/100
-	// 		img_test.Set(x, y, color.NRGBA{uint8(Grey), uint8(Grey), uint8(Grey), uint8(Alpha)})
-	// 	}
-	// }
 
 	w := this.img.Bounds().Dx() / cols
 	h := w * 2
@@ -78,15 +53,6 @@ func (this *AsciiImg) Do(w, h int) string {
 	if this.img == nil {
 		return ascii
 	}
-
-	// img_test := image.NewNRGBA(this.img.Bounds())
-	// for y := 0; y < this.img.Bounds().Dy(); y++ {
-	// 	for x := 0; x < this.img.Bounds().Dx(); x++ {
-	// 		Red, Green, Blue, Alpha := this.img.At(x, y).RGBA()
-	// 		Grey := Red*3/10 + Green*59/100 + Blue*11/100
-	// 		img_test.Set(x, y, color.NRGBA{uint8(Grey), uint8(Grey), uint8(Grey), uint8(Alpha)})
-	// 	}
-	// }
 
 	rows := int(math.Ceil(float64(this.img.Bounds().Dy()) / float64(h)))
 	cols := int(math.Ceil(float64(this.img.Bounds().Dx()) / float64(w)))
