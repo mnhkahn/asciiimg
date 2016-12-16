@@ -10,6 +10,7 @@ import (
 
 var srcImg = flag.String("s", "", "Source image directory.")
 var destAscii = flag.String("d", "", "Destination ascii direcotry.")
+var cols = flag.Int("c", 154, "Columns of ascii.")
 
 func main() {
 	file, err := os.Open(*srcImg)
@@ -23,7 +24,7 @@ func main() {
 	}
 
 	ascii_txt, _ := os.Create(*destAscii)
-	ascii_txt.Write([]byte(ai.Do(4, 8)))
+	ascii_txt.Write([]byte(ai.DoByCol(*cols)))
 	defer ascii_txt.Close()
 
 	fmt.Printf("File save in %s", ascii_txt.Name())
