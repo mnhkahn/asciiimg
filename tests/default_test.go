@@ -8,14 +8,14 @@ import (
 	"github.com/mnhkahn/asciiimg"
 )
 
-func TestMain(t *testing.T) {
+func TestAscii(t *testing.T) {
 	file_name := "eimyymF.png"
-	file, err := os.Open("./" + file_name)
+	file, err := os.Open("./" + fileName)
 	ai, err := asciiimg.NewAsciiImg(file)
 	if err == nil {
-		ascii_txt, _ := os.Create(fmt.Sprintf("%s_ascii.txt", file_name))
-		ascii_txt.Write([]byte(ai.Do(4, 8)))
-		ascii_txt.Close()
+		asciiTxt, _ := os.Create(fmt.Sprintf("%s_ascii.txt", fileName))
+		asciiTxt.Write([]byte(ai.Do(4, 12)))
+		asciiTxt.Close()
 	}
 	fmt.Println("Test Complete.", err)
 }
