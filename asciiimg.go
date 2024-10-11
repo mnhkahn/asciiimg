@@ -70,6 +70,29 @@ func (this *AsciiImg) Do(w, h int) string {
 	return ascii
 }
 
+func (this *AsciiImg) DoByWidth(cols int) string {
+	ascii := ""
+
+	if this.img == nil {
+		return ascii
+	}
+
+	w := this.img.Bounds().Dx() / cols
+	h := w * 3
+	rows := this.img.Bounds().Dy() / h
+	for r := 0; r < rows; r++ {
+		for c := 0; c < cols; c++ {
+			x, y := c*w, r*h
+
+			avg := this.getBlockInfo(x, y, w, h)
+			ascii += string(gray.Get("default", avg))
+		}
+		ascii += "\r\n"
+	}
+
+	return ascii
+}
+
 func (this *AsciiImg) getSize(x, y, w, h int) (int, int) {
 	if x+w > this.img.Bounds().Dx() {
 		w = this.img.Bounds().Dx() - x
