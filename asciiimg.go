@@ -77,7 +77,13 @@ func (this *AsciiImg) DoByWidth(cols int) string {
 		return ascii
 	}
 
+	// w 是横着一个字符站图片多少像素
 	w := this.img.Bounds().Dx() / cols
+	if w == 0 {
+		// 图片太小，就不缩放了
+		w = 1
+		cols = this.img.Bounds().Dx()
+	}
 	h := w * 3
 	rows := this.img.Bounds().Dy() / h
 	for r := 0; r < rows; r++ {
@@ -103,8 +109,8 @@ func (this *AsciiImg) getSize(x, y, w, h int) (int, int) {
 	return w, h
 }
 
-func (this *AsciiImg) getBlockInfo(x, y, w, h int) uint32 {
-	w, h = this.getSize(x, y, w, h)
+func (this *AsciiImg) getBlockInfo(x, y, w0, h0 int) uint32 {
+	w, h := this.getSize(x, y, w0, h0)
 	var sumGray uint32
 	for i := 0; i < h; i++ {
 		for j := 0; j < w; j++ {
